@@ -26,7 +26,7 @@ object CleanReproduction extends App {
     "hoodie.datasource.write.operation" -> "upsert",
     "hoodie.datasource.write.recordkey.field" -> "hkey",
     "hoodie.datasource.write.precombine.field" -> "meta.lsn",
-    "hoodie.datasource.write.partitionpath.field" -> "cluster,shard,bid",
+    "hoodie.datasource.write.partitionpath.field" -> "partition",
     "hoodie.metadata.enable" -> "false",
     "hoodie.index.type" -> "BLOOM",
     "hoodie.table.name" -> "assessment_questions",
