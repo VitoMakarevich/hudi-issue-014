@@ -1,6 +1,6 @@
 package com.example.hudi
 
-import org.apache.spark.SPARK_VERSION
+import org.apache.spark.{SPARK_VERSION, SparkConf}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SparkSession}
 
@@ -14,11 +14,11 @@ object CleanReproduction extends App {
   } else {
     Map.empty[String, String]
   }
+  val sparkConf = new SparkConf().setAll(hudiOverrides)
   val sparkWithDefaultListStructure = SparkSession
     .builder()
     .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-    .config("spark.hadoop.fs.checksums.enabled", "false")
-    .config(hudiOverrides)
+    .config(sparkConf)
     .master("local[*]")
     .getOrCreate()
   val hudiOptions = Map(
@@ -69,8 +69,8 @@ object CleanReproduction extends App {
   val sparkWithNonDefaultListStructure = SparkSession
     .builder()
     .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-    .config("spark.hadoop.fs.checksums.enabled", "false")
-    .config(hudiOverrides + ("spark.hadoop.parquet.avro.write-old-list-structure" -> "false"))
+    .config(sparkConf)
+    .config("spark.hadoop.parquet.avro.write-old-list-structure", "false")
     .master("local[*]")
     .getOrCreate()
 

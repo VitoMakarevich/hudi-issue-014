@@ -4,9 +4,19 @@ version := "0.1"
 
 scalaVersion := "2.12.13"
 
+// Block for Hudi 0.14.1
 val Spark = "3.4.0"
 val Hudi = "0.14.1"
+//
+
+//// Block for Hudi 0.12.1
+//val Spark = "3.3.0"
+//val Hudi = "0.12.1"
+////
+
 val Logging = "3.9.4"
+
+
 
 val sparkVersionParts = Spark.split("\\.")
 val sparkMajorMinor = sparkVersionParts(0) + "." + sparkVersionParts(1)
