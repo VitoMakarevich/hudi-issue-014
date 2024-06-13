@@ -24,11 +24,26 @@ e.g. 0.12.1 new file structure:
 ```
 You can change the version in `build.sbt` to check it.
 
-## Potential solution
-If I completely remove `spark.hadoop.parquet.avro.write-old-list-structure` from Spark Session,
-0.14.1 manages to proceed, but writes 2 level structure, which as I understand will not be able to
-handle case when there will be `null`s in arrays.
+## Silent dataloss
+If initially you have `nullable` list in the schema, then
+2 level old file value will be written as `null`.
+e.g. if In the code I'll have
+```scala
+    // nullable
+    StructField("internal_list", ArrayType(LongType, true), true),
+```
+then all rows in the file(except those updated in the incoming batch) will
+be read as NULL and written to a new file as NULL.
 
+So if you have them not-nullable and have the same issue described here - you are kinda lucky.
+
+## Potential solution
+https://github.com/apache/hudi/pull/11450 
+
+Available, basically I found it similar to the previous [PR which introduced entire class](https://github.com/apache/hudi/pull/7512).
+Basically there Hudi was not able to read 3-level structure files,
+so author carefully checked if it's not present and it's 3 level, then set the value to read it.
+Because otherwise it will try to read 3-level with Spark default(2-level) and fail with similar error.
 
 ## Stacktrace of error Hudi 0.14.1
 ```

@@ -38,6 +38,11 @@ object CleanReproduction extends App {
     StructField("meta", StructType(Array(
       StructField("lsn", LongType, true),
     )), false),
+    /*;
+    * If here you set StructField("internal_list", ArrayType(LongType, false), false)
+    * you will end up silent dataloss - any rows that had array and isn't updated in incoming batch will
+    * set array value to NULL.
+    **/
     StructField("internal_list", ArrayType(LongType, false), false),
     StructField("hkey", StringType, true),
     StructField("partition", StringType, true),
